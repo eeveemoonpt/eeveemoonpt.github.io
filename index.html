@@ -103,23 +103,26 @@
       numberElement.textContent = number;
     }
 
-    // Configuração simplificada que não dispara preflight
     fetch(API_URL, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'client-lang': 'pt'
-      },
-      mode: 'cors'
+      }
     })
     .then(response => {
       console.log('Status:', response.status);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return response.json();
     })
     .then(data => {
       console.log('Resposta:', data);
       if (data && data.number) {
         updateNumber(data.number);
+      } else {
+        throw new Error('Número não encontrado');
       }
     })
     .catch(error => {
