@@ -90,13 +90,13 @@
     <div class="number" id="number">
       <span class="loader"></span>
     </div>
-    <p class="instruction">📸 Faz uma captura de tela (Screenshot) com seu número para participar do sorteio1.</p>
+    <p class="instruction">📸 Faz uma captura de tela (Screenshot) com seu número para participar do sorteio2.</p>
   </div>
 
   <script>
     const BASE_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
-    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-    const API_URL = PROXY_URL + BASE_URL;
+    const PROXY_URL = 'https://api.allorigins.win/get?url=';
+    const API_URL = PROXY_URL + encodeURIComponent(BASE_URL);
     
     console.log('Iniciando chamada via proxy para:', API_URL);
 
@@ -106,31 +106,20 @@
       numberElement.textContent = number;
     }
 
-    fetch(API_URL, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'client-lang': 'pt',
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    })
-    .then(response => {
-      console.log('Status:', response.status);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Resposta:', data);
-      if (data && data.number) {
-        updateNumber(data.number);
-      }
-    })
-    .catch(error => {
-      console.error('Erro detalhado:', error);
-      updateNumber('Erro ao obter número');
-    });
+    fetch(API_URL)
+      .then(response => response.json())
+      .then(data => {
+        // AllOrigins wraps the response in a 'contents' property
+        const result = JSON.parse(data.contents);
+        console.log('Resposta:', result);
+        if (result && result.number) {
+          updateNumber(result.number);
+        }
+      })
+      .catch(error => {
+        console.error('Erro detalhado:', error);
+        updateNumber('Erro ao obter número');
+      });
   </script>
 </body>
 </html>
