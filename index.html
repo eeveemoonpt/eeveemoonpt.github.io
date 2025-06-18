@@ -95,7 +95,7 @@
 
   <script>
     const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
-    console.log('Iniciando chamada para:', API_URL);
+    console.log('Iniciando chamada JSONP para:', API_URL);
 
     function updateNumber(number) {
       const numberElement = document.getElementById('number');
@@ -103,29 +103,31 @@
       numberElement.textContent = number;
     }
 
-    // Configuração simplificada que não dispara preflight
-    fetch(API_URL, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'client-lang': 'pt'
-      },
-      mode: 'cors'
-    })
-    .then(response => {
-      console.log('Status:', response.status);
-      return response.json();
-    })
-    .then(data => {
-      console.log('Resposta:', data);
+    // Callback function that will be called by JSONP response
+    window.handleResponse = function(data) {
+      console.log('Resposta JSONP:', data);
       if (data && data.number) {
         updateNumber(data.number);
+      } else {
+        updateNumber('Erro: número não encontrado');
       }
-    })
-    .catch(error => {
-      console.error('Erro:', error);
-      updateNumber('Erro ao obter número');
-    });
+    };
+
+    // JSONP implementation
+    function loadJSONP() {
+      const script = document.createElement('script');
+      script.src = `${API_URL}?callback=handleResponse`;
+      
+      script.onerror = function() {
+        console.error('Erro ao carregar script');
+        updateNumber('Erro ao conectar com servidor');
+      };
+
+      document.body.appendChild(script);
+    }
+
+    // Start the JSONP request
+    loadJSONP();
   </script>
 </body>
 </html>
