@@ -97,49 +97,35 @@
     const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
     console.log('Iniciando chamada para:', API_URL);
 
-    // Configuração exata como no Postman
-    const myHeaders = new Headers();
-    myHeaders.append("client-lang", "pt");
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Accept", "*/*");
-    myHeaders.append("Connection", "keep-alive");
-    myHeaders.append("Host", "engimatrix-engibots.com");
-    myHeaders.append("Origin", "https://engimatrix-engibots.com");
-
-    const requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-      mode: 'cors',
-      credentials: 'omit'
-    };
-
-    // Remover o loader quando recebermos o número
     function updateNumber(number) {
       const numberElement = document.getElementById('number');
-      numberElement.innerHTML = ''; // Remove o loader
+      numberElement.innerHTML = '';
       numberElement.textContent = number;
     }
 
-    fetch(API_URL, requestOptions)
-      .then(response => {
-        console.log('Status:', response.status);
-        console.log('Headers:', [...response.headers]);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Resposta:', data);
-        if (data && data.number) {
-          updateNumber(data.number);
-        }
-      })
-      .catch(error => {
-        console.error('Erro detalhado:', error);
-        updateNumber('Erro ao obter número');
-      });
+    // Configuração simplificada que não dispara preflight
+    fetch(API_URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'client-lang': 'pt'
+      },
+      mode: 'cors'
+    })
+    .then(response => {
+      console.log('Status:', response.status);
+      return response.json();
+    })
+    .then(data => {
+      console.log('Resposta:', data);
+      if (data && data.number) {
+        updateNumber(data.number);
+      }
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      updateNumber('Erro ao obter número');
+    });
   </script>
 </body>
 </html>
