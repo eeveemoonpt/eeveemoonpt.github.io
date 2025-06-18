@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -95,37 +94,41 @@
   </div>
 
   <script>
-    //const API_URL = 'https://localhost:5000/api/config/getNumber';
-     const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
+    // const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
+    const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
     console.log('Iniciando chamada para:', API_URL);
 
+    // Remover o loader quando recebermos o número
     function updateNumber(number) {
       const numberElement = document.getElementById('number');
-      numberElement.innerHTML = '';
+      numberElement.innerHTML = ''; // Remove o loader
       numberElement.textContent = number;
     }
 
-    // Tentar com proxy CORS
-    
-    
+    // Fazer a chamada ao serviço
     fetch(API_URL, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'client-lang': 'pt',
-        'X-Requested-With': 'XMLHttpRequest'
+        'client-lang': 'pt'
       }
     })
-    .then(response => response.json())
+    .then(response => {
+      console.log('Status:', response.status);
+      console.log('Headers:', [...response.headers]);
+      return response.json();
+    })
     .then(data => {
       console.log('Resposta:', data);
       if (data && data.number) {
         updateNumber(data.number);
+      } else {
+        throw new Error('Número não encontrado na resposta');
       }
     })
     .catch(error => {
-      console.error('Erro:', error);
+      console.error('Erro na requisição:', error);
       updateNumber('Erro ao obter número');
     });
   </script>
