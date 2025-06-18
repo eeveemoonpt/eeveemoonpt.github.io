@@ -90,58 +90,47 @@
     <div class="number" id="number">
       <span class="loader"></span>
     </div>
-    <p class="instruction">📸 Faz uma captura de tela (Screenshot) com seu número para participar do sorteio.</p>
+    <p class="instruction">📸 Faz uma captura de tela (Screenshot) com seu número para participar do sorteio1.</p>
   </div>
 
   <script>
-    const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
-    //const API_URL = 'https://cors-anywhere.herokuapp.com/https://engimatrix-engibots.com/demo/api/config/getNumber';
+    const BASE_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
+    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
+    const API_URL = PROXY_URL + BASE_URL;
+    
+    console.log('Iniciando chamada via proxy para:', API_URL);
 
-    console.log('Iniciando chamada para:', API_URL);
-
-    // Configuração exata como no Postman
-    const myHeaders = new Headers();
-    myHeaders.append("client-lang", "pt");
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Accept", "*/*");
-    myHeaders.append("Connection", "keep-alive");
-    myHeaders.append("Host", "engimatrix-engibots.com");
-    myHeaders.append("Origin", "https://engimatrix-engibots.com");
-
-    const requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow',
-      mode: 'cors',
-      credentials: 'omit'
-    };
-
-    // Remover o loader quando recebermos o número
     function updateNumber(number) {
       const numberElement = document.getElementById('number');
-      numberElement.innerHTML = ''; // Remove o loader
+      numberElement.innerHTML = '';
       numberElement.textContent = number;
     }
 
-    fetch(API_URL, requestOptions)
-      .then(response => {
-        console.log('Status:', response.status);
-        console.log('Headers:', [...response.headers]);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Resposta:', data);
-        if (data && data.number) {
-          updateNumber(data.number);
-        }
-      })
-      .catch(error => {
-        console.error('Erro detalhado:', error);
-        updateNumber('Erro ao obter número');
-      });
+    fetch(API_URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'client-lang': 'pt',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => {
+      console.log('Status:', response.status);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Resposta:', data);
+      if (data && data.number) {
+        updateNumber(data.number);
+      }
+    })
+    .catch(error => {
+      console.error('Erro detalhado:', error);
+      updateNumber('Erro ao obter número');
+    });
   </script>
 </body>
 </html>
