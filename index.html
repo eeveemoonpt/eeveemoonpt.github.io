@@ -90,15 +90,13 @@
     <div class="number" id="number">
       <span class="loader"></span>
     </div>
-    <p class="instruction">📸 Faz uma captura de tela (Screenshot) com seu número para participar do sorteio2.</p>
+    <p class="instruction">📸 Faz uma captura de tela (Screenshot) com seu número para participar do sorteio 20.</p>
   </div>
 
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script>
-    const BASE_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
-    const PROXY_URL = 'https://api.allorigins.win/get?url=';
-    const API_URL = PROXY_URL + encodeURIComponent(BASE_URL);
-    
-    console.log('Iniciando chamada via proxy para:', API_URL);
+    const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
+    console.log('Iniciando chamada Ajax para:', API_URL);
 
     function updateNumber(number) {
       const numberElement = document.getElementById('number');
@@ -106,18 +104,25 @@
       numberElement.textContent = number;
     }
 
-    fetch(API_URL)
-      .then(response => response.json())
-      .then(data => {
-        // AllOrigins wraps the response in a 'contents' property
-        const result = JSON.parse(data.contents);
-        console.log('Resposta:', result);
-        if (result && result.number) {
-          updateNumber(result.number);
+    var settings = {
+      "url": API_URL,
+      "method": "GET",
+      "timeout": 0,
+      "headers": {
+        "client-lang": "pt",
+        "Accept": "application/json"
+      }
+    };
+
+    $.ajax(settings)
+      .done(function (response) {
+        console.log('Resposta:', response);
+        if (response && response.number) {
+          updateNumber(response.number);
         }
       })
-      .catch(error => {
-        console.error('Erro detalhado:', error);
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.error('Erro:', textStatus, errorThrown);
         updateNumber('Erro ao obter número');
       });
   </script>
