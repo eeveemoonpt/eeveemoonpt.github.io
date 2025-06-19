@@ -53,7 +53,14 @@
       background: #F7FAFC;
       border-radius: 8px;
       font-size: clamp(0.8rem, 3vw, 0.9rem);
+      font-weight: 600;
     }
+
+    .camera-icon {
+      font-size: 1.5em;
+      margin-right: 0.3em;
+    }
+
     .loader {
       width: clamp(32px, 8vw, 48px);
       height: clamp(32px, 8vw, 48px);
@@ -90,7 +97,7 @@
     <div class="number" id="number">
       <span class="loader"></span>
     </div>
-    <p class="instruction">📸 Faz uma captura de tela (Screenshot) com seu número para participar do sorteio 20.</p>
+    <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com seu número para participar do sorteio!</strong></p>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
