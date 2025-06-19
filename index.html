@@ -101,12 +101,13 @@
 </head>
 <body>
   <div class="container">
-    <div id="content">
+    <div id="loading">
+      <span class="loader"></span>
+    </div>
+    <div id="content" class="hidden">  <!-- Added hidden class -->
       <h1>Número da Sorte</h1>
       <p>Seu número exclusivo é:</p>
-      <div class="number" id="number">
-        <span class="loader"></span>
-      </div>
+      <div class="number" id="number"></div>  <!-- Removed loader from here -->
       <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com seu número para participar do sorteio!</strong></p>
     </div>
     <div id="error-content" class="hidden">
@@ -120,9 +121,13 @@
     console.log('Iniciando chamada Ajax para:', API_URL);
 
     function updateNumber(number) {
-      const numberElement = document.getElementById('number');
+      const loadingDiv = document.getElementById('loading');
       const contentDiv = document.getElementById('content');
       const errorDiv = document.getElementById('error-content');
+      const numberElement = document.getElementById('number');
+      
+      // Hide loading first
+      loadingDiv.classList.add('hidden');
       
       if (number === -1) {
         contentDiv.classList.add('hidden');
@@ -130,7 +135,6 @@
       } else {
         contentDiv.classList.remove('hidden');
         errorDiv.classList.add('hidden');
-        numberElement.innerHTML = '';
         numberElement.textContent = number;
       }
     }
