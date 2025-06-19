@@ -73,6 +73,9 @@
       font-size: 1.2em;
       margin: 1rem 0;
     }
+    .hidden {
+      display: none;
+    }
     @media (max-width: 380px) {
       body { padding: 0.5rem; }
       .container { 
@@ -98,12 +101,17 @@
 </head>
 <body>
   <div class="container">
-    <h1>Número da Sorte</h1>
-    <p>Seu número exclusivo é:</p>
-    <div class="number" id="number">
-      <span class="loader"></span>
+    <div id="content">
+      <h1>Número da Sorte</h1>
+      <p>Seu número exclusivo é:</p>
+      <div class="number" id="number">
+        <span class="loader"></span>
+      </div>
+      <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com seu número para participar do sorteio!</strong></p>
     </div>
-    <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com seu número para participar do sorteio!</strong></p>
+    <div id="error-content" class="hidden">
+      <div class="error-message">Já existe uma inscrição anterior!</div>
+    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -113,13 +121,16 @@
 
     function updateNumber(number) {
       const numberElement = document.getElementById('number');
-      numberElement.innerHTML = '';
+      const contentDiv = document.getElementById('content');
+      const errorDiv = document.getElementById('error-content');
       
       if (number === -1) {
-        numberElement.className = 'error-message';
-        numberElement.textContent = 'Já existe uma inscrição anterior!';
+        contentDiv.classList.add('hidden');
+        errorDiv.classList.remove('hidden');
       } else {
-        numberElement.className = 'number';
+        contentDiv.classList.remove('hidden');
+        errorDiv.classList.add('hidden');
+        numberElement.innerHTML = '';
         numberElement.textContent = number;
       }
     }
