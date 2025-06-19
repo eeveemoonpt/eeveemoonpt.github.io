@@ -67,6 +67,12 @@
       border: clamp(3px, 1vw, 5px) solid #FFF;
       border-bottom-color: #4C51BF;
     }
+    .error-message {
+      color: #E53E3E;
+      font-weight: 600;
+      font-size: 1.2em;
+      margin: 1rem 0;
+    }
     @media (max-width: 380px) {
       body { padding: 0.5rem; }
       .container { 
@@ -97,7 +103,7 @@
     <div class="number" id="number">
       <span class="loader"></span>
     </div>
-    <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com o teu número para garantires a participação no sorteio!</strong></p>
+    <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com seu número para participar do sorteio!</strong></p>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -108,7 +114,14 @@
     function updateNumber(number) {
       const numberElement = document.getElementById('number');
       numberElement.innerHTML = '';
-      numberElement.textContent = number;
+      
+      if (number === -1) {
+        numberElement.className = 'error-message';
+        numberElement.textContent = 'Já existe uma inscrição anterior!';
+      } else {
+        numberElement.className = 'number';
+        numberElement.textContent = number;
+      }
     }
 
     var settings = {
@@ -124,7 +137,7 @@
     $.ajax(settings)
       .done(function (response) {
         console.log('Resposta:', response);
-        if (response && response.number) {
+        if (response && response.number !== undefined) {
           updateNumber(response.number);
         }
       })
