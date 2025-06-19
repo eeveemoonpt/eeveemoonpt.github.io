@@ -14,12 +14,19 @@
       color: #2D3748;
       min-height: 100vh;
       margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
+      padding: 1rem;
       box-sizing: border-box;
     }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: -1rem;
+    }
+
     .container {
       text-align: center;
       background: rgba(255, 255, 255, 0.95);
@@ -108,19 +115,21 @@
   </style>
 </head>
 <body>
-  <h1 class="page-title">SORTEIO GO FEST</h1>
-  <div class="container">
-    <div id="loading">
-      <span class="loader"></span>
-    </div>
-    <div id="content" class="hidden">  <!-- Added hidden class -->
-      <h1>Número da Sorte</h1>
-      <p>Seu número exclusivo é:</p>
-      <div class="number" id="number"></div>  <!-- Removed loader from here -->
-      <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com seu número para participar do sorteio!</strong></p>
-    </div>
-    <div id="error-content" class="hidden">
-      <div class="error-message">Já existe uma inscrição anterior!</div>
+  <div class="wrapper">
+    <h1 class="page-title">SORTEIO GO FEST</h1>
+    <div class="container">
+      <div id="loading">
+        <span class="loader"></span>
+      </div>
+      <div id="content" class="hidden">  <!-- Added hidden class -->
+        <h1>Número da Sorte</h1>
+        <p>Seu número exclusivo é:</p>
+        <div class="number" id="number"></div>  <!-- Removed loader from here -->
+        <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com seu número para participar do sorteio!</strong></p>
+      </div>
+      <div id="error-content" class="hidden">
+        <div class="error-message">Já existe uma inscrição anterior!</div>
+      </div>
     </div>
   </div>
 
