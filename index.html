@@ -38,9 +38,10 @@
       border-radius: clamp(12px, 3vw, 16px);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(10px);
-      width: min(90%, 400px);
+      width: min(70%, 400px);
       margin: 0 auto;
     }
+
     h1 {
       color: #4A5568;
       font-size: clamp(1.5rem, 5vw, 2rem);
@@ -82,8 +83,12 @@
       color: #E53E3E;
       font-weight: 600;
       font-size: 1.2em;
-      margin: 1rem 0;
+      padding: min(2.5rem, 5vw);
+      width: 70%;
+      margin: 0 auto;
+      box-sizing: border-box;
     }
+
     .hidden {
       display: none;
     }
@@ -92,14 +97,14 @@
         padding: 1.5rem;
       }
       .container { 
-        margin: 0.5rem;
-        width: calc(100% - 3rem);
+        width: 70%;
         padding: 1.8rem;
-        border-radius: 12px;
+        margin: 0 15%;
       }
-      .instruction {
-        padding: 0.8rem;
-        margin-top: 0.8rem;
+      .error-message {
+        width: 70%;
+        margin: 0 15%;
+        padding: 1.8rem;
       }
     }
     @keyframes fadeIn {
