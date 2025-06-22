@@ -220,7 +220,7 @@
 </head>
 <body>
     <div class="wrapper">
-      <h1 class="page-title">SORTEIO GO FEST</h1>
+      <h1 class="page-title" >SORTEIO GO FEST</h1>
       <div id="countdown-section" class="countdown-board">
         <div class="countdown">Inscrições abrem em:</div>
         <div class="countdown-container">
@@ -242,6 +242,15 @@
           </div>
         </div>
       </div>
+      <div id="nickname-modal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:1000;">
+        <div id="nickname-modal-board" style="background:#fff;padding:2rem 1.5rem;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.18);display:flex;flex-direction:column;align-items:center;min-height: 10vw;min-width:60vw;max-width:90vw;width:350px;box-sizing:border-box;">
+          <!-- <div style="font-size:2rem;font-weight:700;color:#4C51BF;margin-bottom:1.2rem;text-align:center;letter-spacing:1px;">SORTEIO GO FEST</div> -->
+          <label for="nickname-input" style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;color:#4C51BF;">Insere o teu nickname para participar:</label>
+          <input id="nickname-input" type="text" maxlength="32" style="font-size:1.1rem;padding:0.5em 1em;border-radius:8px;border:1px solid #CBD5E0;width:100%;margin-bottom:1.2rem;" autocomplete="off" />
+          <button id="nickname-btn" style="font-size:1.1rem;font-weight:600;background:#4C51BF;color:#fff;border:none;border-radius:8px;padding:0.6em 1.5em;cursor:pointer;">Confirmar</button>
+          <div id="nickname-error" style="color:#E53E3E;font-size:0.95em;margin-top:0.7em;display:none;max-width:100%;text-align:center;word-break:break-word;">Por favor, insere um nickname.</div>
+        </div>
+      </div>
       <div class="container" id="main-content" style="display:none;">
         <div id="loading">
           <span class="loader"></span>
@@ -259,55 +268,106 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-      // Defina o início das inscrições
-      const inscricoesInicio = new Date('2025-06-20T14:27:00').getTime();
-
-      function updateCountdown() {
-        const now = new Date().getTime();
-
-        // Se já está dentro do prazo de inscrições, mostra o board e esconde o countdown
-        if (now >= inscricoesInicio) {
-          document.getElementById('countdown-section').style.display = 'none';
-          document.getElementById('main-content').style.display = '';
-          clearInterval(countdownInterval);
-          if (!window._sorteioIniciado) {
-            window._sorteioIniciado = true;
-            startSorteio();
-          }
-          return;
-        }
-
-        // Se ainda não começou, mostra o countdown e esconde o board
-        document.getElementById('countdown-section').style.display = '';
-        document.getElementById('main-content').style.display = 'none';
-
-        const distance = inscricoesInicio - now;
-        if (distance > 0) {
-          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-          document.getElementById('days').textContent = String(days).padStart(2, '0');
-          document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-          document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-          document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-        }
+      // Gera um UUID v4 simples
+      function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
       }
 
-      // Inicializa o estado correto ao carregar
-      document.getElementById('main-content').style.display = 'none';
-      document.getElementById('countdown-section').style.display = '';
+      // Obtém ou cria o browserId no localStorage
+      function getBrowserId() {
+        let browserId = localStorage.getItem('browserId');
+        if (!browserId) {
+          browserId = generateUUID();
+          localStorage.setItem('browserId', browserId);
+        }
+        return browserId;
+      }
 
-      window._sorteioIniciado = false;
+      let userNickname = null;
 
-      // Inicia o countdown
-      const countdownInterval = setInterval(updateCountdown, 1000);
-      updateCountdown();
+      // Modal nickname logic
+      document.getElementById('nickname-btn').onclick = function() {
+        const input = document.getElementById('nickname-input');
+        const error = document.getElementById('nickname-error');
+        const value = input.value.trim();
+        // Regex: apenas letras, números, _ e espaço
+        if (!value || !/^[\w\s]+$/.test(value)) {
+          error.textContent = 'Por favor, insere um nickname válido (sem caracteres especiais).';
+          error.style.display = 'block';
+          input.focus();
+          return;
+        }
+        // Se já existe inscrição (browserId já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
+        if (localStorage.getItem('browserId') ) {
+          document.getElementById('nickname-modal').style.display = 'none';
+          document.getElementById('main-content').style.display = '';
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('content').classList.add('hidden');
+          document.getElementById('error-content').classList.remove('hidden');
+          return;
+        }
+        error.style.display = 'none';
+        userNickname = value;
+        document.getElementById('nickname-modal').style.display = 'none';
+        document.getElementById('main-content').style.display = '';
+        startSorteio();
+      };
 
-      // Só executa o sorteio após o countdown
+      document.getElementById('nickname-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('nickname-btn').click();
+        }
+      });
+
+      // Mostra o relógio até as inscrições abrirem, só depois pede nickname
+      function showCountdownThenNickname() {
+        const inscricoesInicio = new Date('2025-06-22T19:02:00').getTime();
+
+        function updateCountdown() {
+          const now = new Date().getTime();
+
+          if (now >= inscricoesInicio) {
+            document.getElementById('countdown-section').style.display = 'none';
+            document.getElementById('nickname-modal').style.display = 'flex';
+            document.getElementById('main-content').style.display = 'none';
+            clearInterval(countdownInterval);
+            document.getElementById('nickname-input').focus();
+            return;
+          }
+
+          document.getElementById('countdown-section').style.display = '';
+          document.getElementById('nickname-modal').style.display = 'none';
+          document.getElementById('main-content').style.display = 'none';
+
+          const distance = inscricoesInicio - now;
+          if (distance > 0) {
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+          }
+        }
+
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('countdown-section').style.display = '';
+        document.getElementById('nickname-modal').style.display = 'none';
+        window._sorteioIniciado = false;
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+      }
+
+      // Só executa o sorteio após o nickname ser inserido
       function startSorteio() {
         const API_URL = 'https://engimatrix-engibots.com/demo/api/config/getNumber';
+        // const API_URL = 'https://localhost:5000/api/config/getNumber';
         console.log('Iniciando chamada Ajax para:', API_URL);
 
         function updateNumber(number) {
@@ -329,28 +389,50 @@
           }
         }
 
-        var settings = {
-          "url": API_URL,
-          "method": "GET",
-          "timeout": 0,
-          "headers": {
+        $.ajax({
+          url: API_URL,
+          method: "POST",
+          timeout: 0,
+          contentType: "application/json",
+          headers: {
             "client-lang": "pt",
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "browserid": getBrowserId(),
+            "User-Agent": navigator.userAgent
+          },
+          data: JSON.stringify({ nickname: userNickname })
+        })
+        .done(function (response) {
+          console.log('Resposta:', response);
+          if (response && response.number !== undefined) {
+            // Marca como inscrito no localStorage
+            localStorage.setItem('inscrito', '1');
+            updateNumber(response.number);
           }
-        };
-
-        $.ajax(settings)
-          .done(function (response) {
-            console.log('Resposta:', response);
-            if (response && response.number !== undefined) {
-              updateNumber(response.number);
-            }
-          })
-          .fail(function(jqXHR, textStatus, errorThrown) {
-            console.error('Erro:', textStatus, errorThrown);
-            updateNumber('Erro ao obter número');
-          });
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.error('Erro:', textStatus, errorThrown);
+          updateNumber('Erro ao obter número');
+        });
       }
+
+      // Ao carregar, mostra apenas o relógio, depois nickname/modal
+      window.onload = function() {
+        // Se já está inscrito neste browser, mostra logo erro
+        if (localStorage.getItem('browserId') && localStorage.getItem('inscrito') === '1') {
+          document.getElementById('countdown-section').style.display = 'none';
+          document.getElementById('nickname-modal').style.display = 'none';
+          document.getElementById('main-content').style.display = '';
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('content').classList.add('hidden');
+          document.getElementById('error-content').classList.remove('hidden');
+          return;
+        }
+        document.getElementById('countdown-section').style.display = '';
+        document.getElementById('nickname-modal').style.display = 'none';
+        document.getElementById('main-content').style.display = 'none';
+        showCountdownThenNickname();
+      };
     </script>
   </body>
 </html>
