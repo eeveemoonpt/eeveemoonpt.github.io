@@ -420,7 +420,7 @@
       window.onload = function() {
         localStorage.clear();
         // Se já está inscrito neste browser, mostra logo erro
-        if (localStorage.getItem('browserId') && localStorage.getItem('inscrito') === '1') {
+        if (localStorage.getItem('browserId') ) {
           document.getElementById('countdown-section').style.display = 'none';
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
