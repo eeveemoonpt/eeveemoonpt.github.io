@@ -262,7 +262,7 @@
           <p class="instruction"><span class="camera-icon">📸</span><strong>Faz uma captura de tela (Screenshot) com o teu número para garantires a participação no sorteio!</strong></p>
         </div>
         <div id="error-content" class="hidden">
-          <div class="error-message">Já existe uma inscrição anterior!</div>
+          <div class="error-message">Já efetuaste uma inscrição antes!</div>
         </div>
       </div>
     </div>
@@ -418,6 +418,7 @@
 
       // Ao carregar, mostra apenas o relógio, depois nickname/modal
       window.onload = function() {
+        localStorage.clear();
         // Se já está inscrito neste browser, mostra logo erro
         if (localStorage.getItem('browserId') && localStorage.getItem('inscrito') === '1') {
           document.getElementById('countdown-section').style.display = 'none';
