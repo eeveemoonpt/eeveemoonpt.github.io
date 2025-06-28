@@ -277,14 +277,14 @@
         });
       }
 
-      // Obtém ou cria o browserIdGoFest no localStorage
-      function getBrowserIdGoFest() {
-        let browserIdGoFest = localStorage.getItem('browserIdGoFest');
-        if (!browserIdGoFest) {
-          browserIdGoFest = generateUUID();
-          localStorage.setItem('browserIdGoFest', browserIdGoFest);
+      // Obtém ou cria o browserIdGoFest2 no localStorage
+      function getBrowserIdGoFest2() {
+        let browserIdGoFest2 = localStorage.getItem('browserIdGoFest2');
+        if (!browserIdGoFest2) {
+          browserIdGoFest2 = generateUUID();
+          localStorage.setItem('browserIdGoFest2', browserIdGoFest2);
         }
-        return browserIdGoFest;
+        return browserIdGoFest2;
       }
 
       let userNickname = null;
@@ -301,8 +301,8 @@
           input.focus();
           return;
         }
-        // Se já existe inscrição (browserIdGoFest já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
-        if (localStorage.getItem('browserIdGoFest') ) {
+        // Se já existe inscrição (browserIdGoFest2 já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
+        if (localStorage.getItem('browserIdGoFest2') ) {
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
           document.getElementById('loading').classList.add('hidden');
@@ -325,7 +325,7 @@
 
       // Mostra o relógio até as inscrições abrirem, só depois pede nickname
       function showCountdownThenNickname() {
-        const inscricoesInicio = new Date('2025-06-28T18:00:00').getTime();
+        const inscricoesInicio = new Date('2025-06-29T17:00:00').getTime();
 
         function updateCountdown() {
           const now = new Date().getTime();
@@ -398,7 +398,7 @@
           headers: {
             "client-lang": "pt",
             "Accept": "application/json",
-            "browserid": getBrowserIdGoFest(),
+            "browserid": getBrowserIdGoFest2(),
             "User-Agent": navigator.userAgent
           },
           data: JSON.stringify({ nickname: userNickname })
@@ -421,7 +421,7 @@
       window.onload = function() {
         //localStorage.clear();
         // Se já está inscrito neste browser, mostra logo erro
-        if (localStorage.getItem('browserIdGoFest') ) {
+        if (localStorage.getItem('browserIdGoFest2') ) {
           document.getElementById('countdown-section').style.display = 'none';
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
