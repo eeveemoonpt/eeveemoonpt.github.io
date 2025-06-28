@@ -376,17 +376,25 @@
           const contentDiv = document.getElementById('content');
           const errorDiv = document.getElementById('error-content');
           const numberElement = document.getElementById('number');
-          
+          const errorMsg = errorDiv.querySelector('.error-message');
           // Hide loading first
           loadingDiv.classList.add('hidden');
-          
           if (number === -1) {
             contentDiv.classList.add('hidden');
             errorDiv.classList.remove('hidden');
+            errorMsg.textContent = 'Já efetuaste uma inscrição antes!';
+            localStorage.setItem('inscrito', '1');
+            localStorage.removeItem('inscricoesFechadas');
+          } else if (number === 0) {
+            contentDiv.classList.add('hidden');
+            errorDiv.classList.remove('hidden');
+            errorMsg.textContent = 'As inscrições já estão fechadas!';
+            localStorage.setItem('inscricoesFechadas', '1');
           } else {
             contentDiv.classList.remove('hidden');
             errorDiv.classList.add('hidden');
             numberElement.textContent = number;
+            localStorage.removeItem('inscricoesFechadas');
           }
         }
 
@@ -420,6 +428,17 @@
       // Ao carregar, mostra apenas o relógio, depois nickname/modal
       window.onload = function() {
         //localStorage.clear();
+        // Se inscrições fechadas, mostra logo mensagem
+        if (localStorage.getItem('inscricoesFechadas')) {
+          document.getElementById('countdown-section').style.display = 'none';
+          document.getElementById('nickname-modal').style.display = 'none';
+          document.getElementById('main-content').style.display = '';
+          document.getElementById('loading').classList.add('hidden');
+          document.getElementById('content').classList.add('hidden');
+          document.getElementById('error-content').classList.remove('hidden');
+          document.querySelector('#error-content .error-message').textContent = 'As inscrições já estão fechadas!';
+          return;
+        }
         // Se já está inscrito neste browser, mostra logo erro
         if (localStorage.getItem('browserIdGoFest2') ) {
           document.getElementById('countdown-section').style.display = 'none';
@@ -428,6 +447,7 @@
           document.getElementById('loading').classList.add('hidden');
           document.getElementById('content').classList.add('hidden');
           document.getElementById('error-content').classList.remove('hidden');
+          document.querySelector('#error-content .error-message').textContent = 'Já efetuaste uma inscrição antes!';
           return;
         }
         document.getElementById('countdown-section').style.display = '';
