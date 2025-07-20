@@ -277,14 +277,14 @@
         });
       }
 
-      // Obtém ou cria o browserIdGoFest2 no localStorage
-      function getBrowserIdGoFest2() {
-        let browserIdGoFest2 = localStorage.getItem('browserIdGoFest2');
-        if (!browserIdGoFest2) {
-          browserIdGoFest2 = generateUUID();
-          localStorage.setItem('browserIdGoFest2', browserIdGoFest2);
+      // Obtém ou cria o browserIdCDQ no localStorage
+      function getBrowserIdCDQ() {
+        let browserIdCDQ = localStorage.getItem('browserIdCDQ');
+        if (!browserIdCDQ) {
+          browserIdCDQ = generateUUID();
+          localStorage.setItem('browserIdCDQ', browserIdCDQ);
         }
-        return browserIdGoFest2;
+        return browserIdCDQ;
       }
 
       let userNickname = null;
@@ -301,8 +301,8 @@
           input.focus();
           return;
         }
-        // Se já existe inscrição (browserIdGoFest2 já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
-        if (localStorage.getItem('browserIdGoFest2') ) {
+        // Se já existe inscrição (browserIdCDQ já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
+        if (localStorage.getItem('browserIdCDQ') ) {
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
           document.getElementById('loading').classList.add('hidden');
@@ -406,7 +406,7 @@
           headers: {
             "client-lang": "pt",
             "Accept": "application/json",
-            "browserid": getBrowserIdGoFest2(),
+            "browserid": getBrowserIdCDQ(),
             "User-Agent": navigator.userAgent
           },
           data: JSON.stringify({ nickname: userNickname })
@@ -440,7 +440,7 @@
           return;
         }
         // Se já está inscrito neste browser, mostra logo erro
-        if (localStorage.getItem('browserIdGoFest2') ) {
+        if (localStorage.getItem('browserIdCDQ') ) {
           document.getElementById('countdown-section').style.display = 'none';
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
