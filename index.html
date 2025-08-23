@@ -277,14 +277,14 @@
         });
       }
 
-      // Obtém ou cria o browserIdCDQ no localStorage
-      function getBrowserIdCDQ() {
-        let browserIdCDQ = localStorage.getItem('browserIdCDQ');
-        if (!browserIdCDQ) {
-          browserIdCDQ = generateUUID();
-          localStorage.setItem('browserIdCDQ', browserIdCDQ);
+      // Obtém ou cria o browserIdMaxFinal no localStorage
+      function getbrowserIdMaxFinal() {
+        let browserIdMaxFinal = localStorage.getItem('browserIdMaxFinal');
+        if (!browserIdMaxFinal) {
+          browserIdMaxFinal = generateUUID();
+          localStorage.setItem('browserIdMaxFinal', browserIdMaxFinal);
         }
-        return browserIdCDQ;
+        return browserIdMaxFinal;
       }
 
       let userNickname = null;
@@ -301,8 +301,8 @@
           input.focus();
           return;
         }
-        // Se já existe inscrição (browserIdCDQ já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
-        if (localStorage.getItem('browserIdCDQ') ) {
+        // Se já existe inscrição (browserIdMaxFinal já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
+        if (localStorage.getItem('browserIdMaxFinal') ) {
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
           document.getElementById('loading').classList.add('hidden');
@@ -406,7 +406,7 @@
           headers: {
             "client-lang": "pt",
             "Accept": "application/json",
-            "browserid": getBrowserIdCDQ(),
+            "browserid": getbrowserIdMaxFinal(),
             "User-Agent": navigator.userAgent
           },
           data: JSON.stringify({ nickname: userNickname })
@@ -440,7 +440,7 @@
           return;
         }
         // Se já está inscrito neste browser, mostra logo erro
-        if (localStorage.getItem('browserIdCDQ') ) {
+        if (localStorage.getItem('browserIdMaxFinal') ) {
           document.getElementById('countdown-section').style.display = 'none';
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
@@ -458,3 +458,4 @@
     </script>
   </body>
 </html>
+
