@@ -277,14 +277,14 @@
         });
       }
 
-      // Obtém ou cria o browserIdCDRockee no localStorage
-      function getbrowserIdCDRockee() {
-        let browserIdCDRockee = localStorage.getItem('browserIdCDRockee');
-        if (!browserIdCDRockee) {
-          browserIdCDRockee = generateUUID();
-          localStorage.setItem('browserIdCDRockee', browserIdCDRockee);
+      // Obtém ou cria o browserIdGACampfire no localStorage
+      function getbrowserIdGACampfire() {
+        let browserIdGACampfire = localStorage.getItem('browserIdGACampfire');
+        if (!browserIdGACampfire) {
+          browserIdGACampfire = generateUUID();
+          localStorage.setItem('browserIdGACampfire', browserIdGACampfire);
         }
-        return browserIdCDRockee;
+        return browserIdGACampfire;
       }
 
       let userNickname = null;
@@ -301,8 +301,8 @@
           input.focus();
           return;
         }
-        // Se já existe inscrição (browserIdCDRockee já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
-        if (localStorage.getItem('browserIdCDRockee') ) {
+        // Se já existe inscrição (browserIdGACampfire já usado E já foi inscrito), mostra erro e não deixa inscrever novamente
+        if (localStorage.getItem('browserIdGACampfire') ) {
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
           document.getElementById('loading').classList.add('hidden');
@@ -325,7 +325,7 @@
 
       // Mostra o relógio até as inscrições abrirem, só depois pede nickname
       function showCountdownThenNickname() {
-        const inscricoesInicio = new Date('2025-08-30T10:00:00').getTime();
+        const inscricoesInicio = new Date('2025-09-07T18:00:00').getTime();
 
         function updateCountdown() {
           const now = new Date().getTime();
@@ -406,7 +406,7 @@
           headers: {
             "client-lang": "pt",
             "Accept": "application/json",
-            "browserid": getbrowserIdCDRockee(),
+            "browserid": getbrowserIdGACampfire(),
             "User-Agent": navigator.userAgent
           },
           data: JSON.stringify({ nickname: userNickname })
@@ -427,7 +427,11 @@
 
       // Ao carregar, mostra apenas o relógio, depois nickname/modal
       window.onload = function() {
-        //localStorage.clear();
+
+         if (!localStorage.getItem('browserIdGACampfire')) {
+          localStorage.clear();
+         }
+        
         // Se inscrições fechadas, mostra logo mensagem
         if (localStorage.getItem('inscricoesFechadas')) {
           document.getElementById('countdown-section').style.display = 'none';
@@ -440,7 +444,7 @@
           return;
         }
         // Se já está inscrito neste browser, mostra logo erro
-        if (localStorage.getItem('browserIdCDRockee') ) {
+        if (localStorage.getItem('browserIdGACampfire') ) {
           document.getElementById('countdown-section').style.display = 'none';
           document.getElementById('nickname-modal').style.display = 'none';
           document.getElementById('main-content').style.display = '';
@@ -458,6 +462,7 @@
     </script>
   </body>
 </html>
+
 
 
 
