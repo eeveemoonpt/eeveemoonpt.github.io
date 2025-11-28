@@ -398,7 +398,20 @@
           }
         }
 
-        $.ajax({
+       /* $.ajax({
+          url: API_URL,
+          method: "POST",
+          timeout: 0,
+          contentType: "application/json",
+          headers: {
+            "client-lang": "pt",
+            "Accept": "application/json",
+            "browserid": getbrowserIdGACampfire(),
+            "User-Agent": navigator.userAgent
+          },
+          data: JSON.stringify({ nickname: userNickname })
+        })*/
+          $.ajax({
           url: API_URL,
           method: "POST",
           timeout: 0,
@@ -462,6 +475,7 @@
     </script>
   </body>
 </html>
+
 
 
 
