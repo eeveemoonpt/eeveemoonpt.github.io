@@ -278,7 +278,7 @@
       }
 
       // Obtém ou cria o browserIdGACampfire no localStorage
-      function getbrowserIdGACampfire() {
+      function getbrowserIdGATwitch() {
         let browserIdGACampfire = localStorage.getItem('browserIdGACampfire');
         if (!browserIdGACampfire) {
           browserIdGACampfire = generateUUID();
@@ -406,7 +406,7 @@
           headers: {
             "client-lang": "pt",
             "Accept": "application/json",
-            "browserid": getbrowserIdGACampfire(),
+            "browserid": getbrowserIdGATwitch(),
             "User-Agent": navigator.userAgent
           },
           data: JSON.stringify({ nickname: userNickname })
@@ -419,7 +419,7 @@
           headers: {
             "client-lang": "pt",
             "Accept": "application/json",
-            "browserid": getbrowserIdGACampfire(),
+            "browserid": getbrowserIdGATwitch(),
             "User-Agent": navigator.userAgent,
            // "referer": "https://eeveemoonpt.github.io"
           },
@@ -476,6 +476,7 @@
     </script>
   </body>
 </html>
+
 
 
 
